@@ -14,9 +14,30 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String         @id @default(cuid())
+  email           String         @unique
+  name            String
+  password        String
+  createdAt       DateTime       @default(now())
+  meetings        Meeting[]
+  disponibilities Disponibiliy[]
+}
+
+model Meeting {
+  id              String         @id @default(cuid())
+  name            String
+  created_by_id   String
+  created_by      User           @relation(fields: [created_by_id], references: [id])
+  createdAt       DateTime       @default(now())
+  disponibilities Disponibiliy[]
+}
+
+model Disponibiliy {
+  id        String     @id @default(cuid())
+  meetingId String
+  userId    String
+  date      DateTime[]
+  user      User       @relation(fields: [userId], references: [id])
+  meeting   Meeting    @relation(fields: [meetingId], references: [id])
+  createdAt DateTime   @default(now())
 }
